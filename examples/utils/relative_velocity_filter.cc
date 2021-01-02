@@ -13,6 +13,7 @@
 // specific language governing permissions and limitations under the License.
 
 #include "relative_velocity_filter.h"
+#include <cmath>
 using namespace std::chrono;
 
 namespace TNN_NS {
@@ -60,7 +61,7 @@ float RelativeVelocityFilter::Apply(const TimeStamp& timestamp, float value_scal
         
         constexpr double kNanoSecondsToSecond = 1e-9;
         const float velocity = cumulative_distance / (cumulative_duration * kNanoSecondsToSecond);
-        alpha = 1.0f - 1.0f / (1.0f + velocity_scale_ * std::abs(velocity));
+        alpha = 1.0f - 1.0f / (1.0f + velocity_scale_ * std::fabs(velocity));
         window_.push_front({distance, duration});
         if (window_.size() > max_window_size_) {
             window_.pop_back();
